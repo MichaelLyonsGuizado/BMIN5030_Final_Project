@@ -14,11 +14,18 @@ Use this template to complete your project throughout the course. Your Final Pro
 
 ## Overview {#sec-overview}
 
+Wildlife rehabilitators care for millions of animals each year. One of the most common reasons a wild animal is admitted into wildlife rehabilitation is orphaning. Despite great advances in the care of orphaned wildlife under rehabilitation, there are still many mortalities. Understanding risk factors for mortality in orphaned animals could help wildlife rehabilitators target their resources better and shine light on species or intake situations that different protocols. This project will aim to identify whether species and weight at admission as compared to adult weight are risk factors for mortality in orphaned wild birds. The data utilized will be from the Bird Center of Michigan patient records in WILD-ONe from 2018 to 2023. An agreement with the Bird Center of Michigan was made to use this data. The results of this project will be used by the Bird Center of Michigan to review and adapt care protocols for more vulnerable species and individuals.
+
+**Faculty consultations:**
+
+1.  Prof. Louise Moncla: Louise posed questions on the data and how data would be analyzed. She asked how many birds per species are admitted to the center per unit time and how that impacts the power to detect differences. She also asked whether there were changes in intake procedure over the course of the study and how that would impact the statistics. As a result of this conversation, I will be including a power analysis for species differences and a sensitivity analysis for intake year to capture any potential changes in intake procedure.
+2.  Prof. John Holmes: Originally I was planning to investigate whether there are trends in weight gain in birds that survive vs die. John brought up some important points on how challenging this analysis would be due to not knowing the age at intake, species having different weights, and the varying times birds are at the center. I would still like to investigate this question, but it is beyond the scope of this project. As a result, I will be investigating whether weight at intake (as a percent of adult weight) is a risk factor. If there is sufficient time, I would like to plot weight change in birds that ultimately survived vs died to explore the data.
+
 Give a brief a description of your project and its goal(s), what data you are using to complete it, and what two faculty/staff in different fields you have spoken to about your project with a brief summary of what you learned from each person. Include a link to your final project GitHub repository.
 
 ## Introduction {#sec-introduction}
 
-Describe the problem addressed, its significance, and some background to motivate the problem. This should extend what is in the @sec-overview.
+Wildlife rehabilitation clinics care for millions of animals worldwide each year . With orphaning being one of the Describe the problem addressed, its significance, and some background to motivate the problem. This should extend what is in the @sec-overview.
 
 Explain why your problem is interdisciplinary, what fields can contribute to its understanding, and incorporate background related to what you learned from meeting with faculty/staff.
 
