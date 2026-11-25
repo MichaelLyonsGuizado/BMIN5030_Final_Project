@@ -33,6 +33,54 @@ Understanding orphaned bird mortality under wildlife rehabilitation is an interd
 
 Will need to do a lot of data cleaning in R to find the first intake weight and separate that weight by the individual bird id and combine it with species and mortality data. Will also need to find a source for adult weights of the different species. Then will use ggplot for simple plots of survival by species and weight at intake as a percentage.
 
+Data was retrieved by downloading records on WildOne.org
+
+### Data Cleaning
+
+```{r}
+#reading in data and cleaning
+library(tidyverse)
+bird_raw <- read.csv("/Users/milyons/Library/CloudStorage/OneDrive-PennO365/PDFs/Bird/epi_project/data/raw/custom-report.csv")
+
+#filter for the dates of interest (2018 - 2023), 2023 was when the database stopped being used.
+bird_raw <- bird_raw |> filter(mdy(Date.Admitted) >= mdy("01/01/2018"))
+
+#Select only the columns of interest
+#column Weigh.Date is the intake weight, column Weight.Record.-.Weight are the ongoing weights for the same individual (not of interest right now)
+bird_cleaned <- bird_raw |> select(Case.Number, Species, Genus, Life.Stage, Date.Found, Time.Found, Date.Admitted, Time.Admitted, Weigh.Date, Weigh.Time, Weight.Comments, Disposition, Time.Euthanized, Time.Died, Date.Dispositioned)
+
+#combine species and genus columns together, also needed to get rid of extra spaces
+bird_cleaned <- bird_cleaned |> mutate(across(c(Genus, Species), str_trim)) |> unite("full_species", Genus, Species)
+
+#filter out transferred birds
+bird_cleaned <- bird_cleaned |> filter(Disposition != "Transferred")
+
+#identify species that never survived to check whether most of those individuals were transferred out
+species_never_survived <- bird_cleaned |> group_by(full_species) |> filter(!any(Disposition == "Released", na.rm = TRUE)) |> distinct(full_species)
+
+#most non-passerines get transferred at the bird center if they don't die in captivity or are euthanized. This is due to the nature of the center only accepting songbirds (passerines). For all species that have never been released (previous filter), going through them to identify non-passerines to filter out.
+#Reading in a csv file of taxonomy to identify non-passerines
+taxonomy <- read.csv("/Users/milyons/Library/CloudStorage/OneDrive-PennO365/PDFs/Bird/epi_project/data/raw/BirdLife_taxonomic_checklist.csv")
+passerine_species <- taxonomy |> filter(Order == "PASSERIFORMES")
+passerine_species <- passerine_species |> mutate(Scientific.name = str_replace_all(str_squish(Scientific.name), " ", "_"))
+passerine_species <- passerine_species |> pull(Scientific.name)
+
+#now identifying the species that are passerines in the never survived group
+non_passerines <- species_never_survived |> filter(!full_species %in% passerine_species) |> pull(full_species)
+
+#filter out the species that are not passerines
+bird_cleaned <- bird_cleaned |> filter(!full_species %in% non_passerines)
+```
+
+### Overview of the data
+
+```{r}
+#species counts
+species_counts <- bird_cleaned |> group_by(full_species) |> summarise(unique_cases = n_distinct(Case.Number)) |> arrange(desc(unique_cases))
+species_counts
+#
+```
+
 Describe the data used and general methodological approach used to address the problem described in the @sec-introduction. Subsequently, incorporate full R code necessary to retrieve and clean data, and perform analysis. Be sure to include a description of code so that others (including your future self) can understand what you are doing and why.
 
 ## Results {#sec-results}
